@@ -1,40 +1,44 @@
-/*
- * Copyright 2015 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package com.example.storage;
 
-// [START storage_quickstart]
-// Imports the Google Cloud client library
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 
+import java.io.FileInputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class QuickstartSample {
   public static void main(String... args) throws Exception {
     // Instantiates a client
+    // Set GOOGLE_APPLICATION_CREDENTIALS environment variable in advance
     Storage storage = StorageOptions.getDefaultInstance().getService();
 
-    // The name for the new bucket
-    String bucketName = args[0];  // "my-new-bucket";
+    BlobId blobId = BlobId.of("nmjcloud_jar_test", "addons/simple-bean-1.0.jar");
+    Blob blob = storage.get(blobId);
 
+    Path path = Paths.get("D:\\lib\\simple-bean-1.0.jar");
+    blob.downloadTo(path);
+
+    System.out.printf("Download successfully%n");
+
+  }
+
+  private void createBucket() throws Exception {
+    String SERVICE_ACCOUNT_JSON_PATH = "C:\\Users\\chenyy3.SJNS\\gcpconfig\\My First Project-6f9cff47c4f0.json";
+    Storage storage = StorageOptions.newBuilder()
+        .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(SERVICE_ACCOUNT_JSON_PATH))).build()
+        .getService();
+
+    String bucketName = "my-new-bucket-abc";
     // Creates the new bucket
     Bucket bucket = storage.create(BucketInfo.of(bucketName));
 
     System.out.printf("Bucket %s created.%n", bucket.getName());
   }
 }
-// [END storage_quickstart]
