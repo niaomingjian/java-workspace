@@ -15,7 +15,29 @@ import java.nio.file.Paths;
 
 public class QuickstartSample {
   public static void main(String... args) throws Exception {
-    // Instantiates a client
+    createBucket();
+    
+    // download();
+
+  }
+
+  private static void createBucket() throws Exception {
+//    String SERVICE_ACCOUNT_JSON_PATH = "C:\\Users\\chenyy3.SJNS\\gcpconfig\\gcp20180311-4edbf4ff2bfb.json";
+//    Storage storage = StorageOptions.newBuilder()
+//        .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(SERVICE_ACCOUNT_JSON_PATH))).build()
+//        .getService();
+    
+    Storage storage = StorageOptions.getDefaultInstance().getService();
+    String bucketName = "my-new-bucket-abc-20180314";
+    // Creates the new bucket
+    Bucket bucket = storage.create(BucketInfo.of(bucketName));
+
+    System.out.printf("Bucket %s created.%n", bucket.getName());
+  }
+  
+  private static void download() {
+     // Instantiates a client
+    
     // Set GOOGLE_APPLICATION_CREDENTIALS environment variable in advance
     Storage storage = StorageOptions.getDefaultInstance().getService();
 
@@ -26,19 +48,5 @@ public class QuickstartSample {
     blob.downloadTo(path);
 
     System.out.printf("Download successfully%n");
-
-  }
-
-  private void createBucket() throws Exception {
-    String SERVICE_ACCOUNT_JSON_PATH = "C:\\Users\\chenyy3.SJNS\\gcpconfig\\My First Project-6f9cff47c4f0.json";
-    Storage storage = StorageOptions.newBuilder()
-        .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(SERVICE_ACCOUNT_JSON_PATH))).build()
-        .getService();
-
-    String bucketName = "my-new-bucket-abc";
-    // Creates the new bucket
-    Bucket bucket = storage.create(BucketInfo.of(bucketName));
-
-    System.out.printf("Bucket %s created.%n", bucket.getName());
   }
 }
