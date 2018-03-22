@@ -45,6 +45,15 @@ public class MainClass {
         break;
       }
     }
+    // @formatter:off    
+//    System.out.println("----------------test5-------------");
+//    list.forEach(str ->{
+//      System.out.println(str);
+//      if ("stop".equals(str)) {
+//        break;  // compile error: break cannot be used outside of a loop or a switch
+//      }
+//    });
+    // @formatter:on
 
     // @formatter:off
     // output:
